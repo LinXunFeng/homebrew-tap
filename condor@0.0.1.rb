@@ -7,12 +7,12 @@ class CondorAT001 < Formula
   homepage "https://github.com/LinXunFeng/condor"
   license "MIT"
   
-  if OS.host_cpu == 'x86_64'
-    url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor_x86_64.tar.gz"
-    sha256 "d656fd05f13f997ff4293520b9ef74fe5afe691a27d95f78718f93bb611fce85"
-  else
+  if Hardware::CPU.arm?
     url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor_arm64.tar.gz"
     sha256 "662dce24a2e0cdb3060d9bf15dd7fd4871377c8196fdfc098deed75836dbcc05"
+  else
+    url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor_x86_64.tar.gz"
+    sha256 "d656fd05f13f997ff4293520b9ef74fe5afe691a27d95f78718f93bb611fce85"
   end
 
   # depends_on "cmake" => :build
