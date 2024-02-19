@@ -5,9 +5,15 @@ class CondorAT001 < Formula
   version "0.0.1"
   desc "由Dart实现的符号表上传辅助工具"
   homepage "https://github.com/LinXunFeng/condor"
-  url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor.tar.gz"
-  sha256 "662dce24a2e0cdb3060d9bf15dd7fd4871377c8196fdfc098deed75836dbcc05"
   license "MIT"
+  
+  if OS.host_cpu == 'x86_64'
+    url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor_x86_64.tar.gz"
+    sha256 "d656fd05f13f997ff4293520b9ef74fe5afe691a27d95f78718f93bb611fce85"
+  else
+    url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor_arm64.tar.gz"
+    sha256 "662dce24a2e0cdb3060d9bf15dd7fd4871377c8196fdfc098deed75836dbcc05"
+  end
 
   # depends_on "cmake" => :build
 
