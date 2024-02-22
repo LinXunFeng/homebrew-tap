@@ -1,7 +1,7 @@
 # Documentation: https://docs.brew.sh/Formula-Cookbook
 #                https://rubydoc.brew.sh/Formula
 # PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
-class Condor < Formula
+class CondorAT003 < Formula
   version "0.0.3"
   desc "由Dart实现的符号表上传辅助工具"
   homepage "https://github.com/LinXunFeng/condor"
