@@ -6,10 +6,10 @@ on:
     inputs:
       sha256_macos:
         required: true
-        default: ''
+        default: ""
       version:
         required: true
-        default: ''
+        default: ""
 
 permissions:
   pull-requests: write
@@ -28,29 +28,20 @@ jobs:
           -e 's/{{ sha256_macos }}/${{ github.event.client_payload.sha256_macos }}/g' \
           condor_template.rb > Formula/condor.rb
 
-      # GitHub Apps
-      - name: Generate github apps token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.CONDOR_APP_ID }}
-          private-key: ${{ secrets.CONDOR_APP_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ github.token }}
           commit-message: "feat: bump up to ${{ github.event.client_payload.version }}"
           branch: update-tap
           delete-branch: true
           title: "feat: bump up to ${{ github.event.client_payload.version }}"
-          
+
       - name: Enable Pull Request Automerge
         if: steps.cpr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ github.token }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
