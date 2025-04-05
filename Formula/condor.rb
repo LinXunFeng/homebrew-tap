@@ -1,10 +1,10 @@
 class Condor < Formula
-  version "v0.1.1"
+  version "v0.1.2"
   desc "LinXunFeng的脚本工具集"
   homepage "https://github.com/LinXunFeng/condor"
 
   url "https://github.com/LinXunFeng/condor/releases/download/#{version}/condor-macos.tar.gz"
-  sha256 "f390944fe585f53fe5a6e017e46796a21707b85a0b8a5bce77521435a55fb5ce"
+  sha256 "12f872a742b08c14bc24b35364772ecea7200e49e7c001829add66d8430482f4"
 
   def install
     bin.install "condor"
