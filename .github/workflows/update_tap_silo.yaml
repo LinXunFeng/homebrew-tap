@@ -1,0 +1,78 @@
+name: Update silo
+on:
+  repository_dispatch:
+    types: [update-tap-silo]
+  # Manual entry, so a release whose tap job failed can be patched up by hand.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version without the v prefix, e.g. 0.1.0"
+        required: true
+        default: ""
+      sha256_cli_arm64:
+        description: "sha256 of silo-<version>-macos-arm64.tar.gz"
+        required: true
+        default: ""
+      sha256_cli_x86_64:
+        description: "sha256 of silo-<version>-macos-x86_64.tar.gz"
+        required: true
+        default: ""
+      sha256_app:
+        description: "sha256 of Silo-<version>-macOS.dmg"
+        required: true
+        default: ""
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  update-tap-silo:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event.client_payload.version || inputs.version }}
+      SHA256_CLI_ARM64: ${{ github.event.client_payload.sha256_cli_arm64 || inputs.sha256_cli_arm64 }}
+      SHA256_CLI_X86_64: ${{ github.event.client_payload.sha256_cli_x86_64 || inputs.sha256_cli_x86_64 }}
+      SHA256_APP: ${{ github.event.client_payload.sha256_app || inputs.sha256_app }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Render formula and cask
+        shell: bash
+        run: |
+          set -euo pipefail
+          for v in VERSION SHA256_CLI_ARM64 SHA256_CLI_X86_64 SHA256_APP; do
+            [ -n "${!v}" ] || { echo "$v is empty"; exit 1; }
+          done
+
+          mkdir -p Formula Casks
+          sed \
+            -e "s/{{ version }}/${VERSION}/g" \
+            -e "s/{{ sha256_cli_arm64 }}/${SHA256_CLI_ARM64}/g" \
+            -e "s/{{ sha256_cli_x86_64 }}/${SHA256_CLI_X86_64}/g" \
+            silo_template.rb > Formula/silo.rb
+          sed \
+            -e "s/{{ version }}/${VERSION}/g" \
+            -e "s/{{ sha256_app }}/${SHA256_APP}/g" \
+            silo_cask_template.rb > Casks/silo.rb
+
+          # A stray placeholder means the payload was short a field.
+          ! grep -n '{{' Formula/silo.rb Casks/silo.rb
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ github.token }}
+          commit-message: "feat(silo): bump up to ${{ env.VERSION }}"
+          branch: update-tap-silo
+          delete-branch: true
+          title: "feat(silo): bump up to ${{ env.VERSION }}"
+
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ github.token }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
