@@ -1,6 +1,6 @@
 cask "silo" do
-  version "0.1.1"
-  sha256 "9ff0d21b4909f9af6b68061d859619a284dd30c47fa606ad0cf54cb0f3f8635e"
+  version "0.1.2"
+  sha256 "16743ee20ce49462bf61c2252320e13f29f15d61327c18a7c751985fa2e35157"
 
   url "https://github.com/LinXunFeng/silo/releases/download/v#{version}/Silo-#{version}-macOS.dmg"
   name "Silo"

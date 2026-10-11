@@ -1,7 +1,7 @@
 class Silo < Formula
   desc "Local model library CLI - download once, link everywhere"
   homepage "https://github.com/LinXunFeng/silo"
-  version "0.1.1"
+  version "0.1.2"
   license "Apache-2.0"
 
   depends_on :macos
@@ -14,12 +14,12 @@ class Silo < Formula
   on_macos do
     on_arm do
       url "https://github.com/LinXunFeng/silo/releases/download/v#{version}/silo-#{version}-macos-arm64.tar.gz"
-      sha256 "770c15164c41d989b9127b7248de1c934086f432655350ff98389d1df9feaaf3"
+      sha256 "7fe78abfefdb856b227cfad5d801eb1ea0d502ceda6ebcff53854ae915e2208f"
     end
 
     on_intel do
       url "https://github.com/LinXunFeng/silo/releases/download/v#{version}/silo-#{version}-macos-x86_64.tar.gz"
-      sha256 "dde43c7e8b223d86cd2f5dafbfc30ef9f4b5b0d8d9e058884aba39554351b83a"
+      sha256 "9c8669d0cc5aa68247cd6d4687e0566626da631b7fad77045b7b69f8776e72ed"
     end
   end
 
